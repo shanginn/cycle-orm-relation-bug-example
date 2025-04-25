@@ -1,0 +1,40 @@
+version: '3'
+status:
+    address: 0.0.0.0:2114
+rpc:
+    listen: tcp://127.0.0.1:6001
+metrics:
+    address: 0.0.0.0:2112
+    middleware: [ "http_metrics" ]
+http:
+    address: 0.0.0.0:8080
+    middleware:
+        - gzip
+        - static
+    static:
+        dir: public
+        forbid:
+            - .php
+            - .htaccess
+    pool:
+        debug: true
+        num_workers: 1
+        supervisor:
+            max_worker_memory: 100
+    http2:
+        h2c: true
+        max_concurrent_streams: 128
+server:
+    command: php app.php
+    relay: pipes
+kv:
+    local:
+        driver: memory
+        config:
+            interval: 60
+service:
+    watcher:
+        command: watchexec -n -p -- rr reset
+        service_name_in_log: true
+        exec_timeout: 0s
+        timeout_stop_sec: 0

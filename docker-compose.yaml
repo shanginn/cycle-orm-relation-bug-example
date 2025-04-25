@@ -1,0 +1,42 @@
+services:
+  bot:
+    env_file:
+      - .env
+    build:
+      context: local
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - ./local/php.ini:/usr/local/etc/php/php.ini
+    depends_on:
+      - db
+    entrypoint: rr serve -c .rr.dev.yaml
+    ports:
+      - '${HOST_APP_PORT:-80}:8080'
+      - '${HOST_APP_PORT_HTTPS:-443}:8043'
+      - '2112:2112'
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_DB: $DB_DATABASE
+      POSTGRES_USER: $DB_USERNAME
+      TEST_DATABASE: '${DB_DATABASE}_test'
+    ports:
+      - "25432:5432"
+    volumes:
+      - cycle-orm-relation-pgsql:/var/lib/postgresql/data
+      - './local/pgsql/init/create-test-database.sh:/docker-entrypoint-initdb.d/01-create-test-database.sh'
+    healthcheck:
+      test: [ 'CMD', 'pg_isready', '-q', '-d', '${DB_DATABASE}', '-U', '${DB_USERNAME}' ]
+      retries: 3
+      timeout: 5s
+  buggregator:
+    image: ghcr.io/buggregator/server:1.10.4
+    ports:
+      - "28000:8000"
+
+volumes:
+  cycle-orm-relation-pgsql:
+    driver: local

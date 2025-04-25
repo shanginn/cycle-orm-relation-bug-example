@@ -1,0 +1,7 @@
+{
+    "require": {
+        "psy/psysh": "@stable",
+        "friendsofphp/php-cs-fixer": "^3",
+        "erickskrauch/php-cs-fixer-custom-fixers": "^1"
+    }
+}

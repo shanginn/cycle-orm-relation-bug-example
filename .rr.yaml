@@ -1,0 +1,51 @@
+version: '3'
+status:
+    address: 0.0.0.0:2114
+rpc:
+    listen: tcp://127.0.0.1:6001
+metrics:
+    address: 0.0.0.0:2112
+    middleware: [ "http_metrics" ]
+http:
+    address: 0.0.0.0:8080
+    middleware:
+        - gzip
+        - static
+    static:
+        dir: public
+        forbid:
+            - .php
+            - .htaccess
+    pool:
+        allocate_timeout: 60s
+        num_workers: 5
+        supervisor:
+            max_worker_memory: 256
+        destroy_timeout: 5s
+        dynamic_allocator:
+            max_workers: 25
+            spawn_rate: 5
+            idle_timeout: 10s
+    http2:
+        h2c: true
+        max_concurrent_streams: 128
+server:
+    command: php app.php
+    relay: pipes
+kv:
+    local:
+        driver: memory
+        config:
+            interval: 60
+temporal:
+    address: $TEMPORAL_ADDRESS
+    namespace: $TEMPORAL_NAMESPACE
+service:
+    telegram-bot:
+        command: 'php app.php telegram:run'
+        process_num: 1
+        timeout_stop_sec: 5
+        exec_timeout: 0s
+        remain_after_exit: true
+        service_name_in_log: true
+        restart_sec: 1
