@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Database\Factory;
 
 use App\Entity\Subscription;
-use DateTimeImmutable;
-use Faker\Generator;
 use Spiral\DatabaseSeeder\Factory\AbstractFactory;
 
 class SubscriptionFactory extends AbstractFactory
@@ -19,7 +17,7 @@ class SubscriptionFactory extends AbstractFactory
     public function definition(): array
     {
         return [
-            'user'      => UserFactory::new()->makeOne(),
+            'user' => UserFactory::new()->makeOne(),
         ];
     }
 

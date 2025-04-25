@@ -14,16 +14,16 @@ class OrmDefault3733c522d45c53d7daf40d31e8cd3df6 extends Migration
     {
         $this->table('users')
         ->addColumn('created_at', 'datetime', [
-            'nullable' => false,
+            'nullable'     => false,
             'defaultValue' => 'CURRENT_TIMESTAMP',
             'withTimezone' => false,
-            'comment' => '',
+            'comment'      => '',
         ])
         ->addColumn('updated_at', 'datetime', [
-            'nullable' => true,
+            'nullable'     => true,
             'defaultValue' => null,
             'withTimezone' => false,
-            'comment' => '',
+            'comment'      => '',
         ])
         ->addColumn('id', 'text', ['nullable' => false, 'defaultValue' => null, 'comment' => ''])
         ->addColumn('telegram_user_id', 'bigInteger', ['nullable' => false, 'defaultValue' => null, 'comment' => ''])
@@ -32,16 +32,16 @@ class OrmDefault3733c522d45c53d7daf40d31e8cd3df6 extends Migration
         ->create();
         $this->table('subscriptions')
         ->addColumn('created_at', 'datetime', [
-            'nullable' => false,
+            'nullable'     => false,
             'defaultValue' => 'CURRENT_TIMESTAMP',
             'withTimezone' => false,
-            'comment' => '',
+            'comment'      => '',
         ])
         ->addColumn('updated_at', 'datetime', [
-            'nullable' => true,
+            'nullable'     => true,
             'defaultValue' => null,
             'withTimezone' => false,
-            'comment' => '',
+            'comment'      => '',
         ])
         ->addColumn('id', 'string', ['nullable' => false, 'defaultValue' => null, 'size' => 255, 'comment' => ''])
         ->addColumn('is_active', 'boolean', ['nullable' => false, 'defaultValue' => false, 'comment' => ''])
@@ -49,9 +49,9 @@ class OrmDefault3733c522d45c53d7daf40d31e8cd3df6 extends Migration
         ->addIndex(['user_id'], ['name' => 'subscriptions_index_user_id_680b06a0ad5e5', 'unique' => false])
         ->addIndex(['user_id', 'is_active'], ['name' => 'idx_unique_active_subscriptions', 'unique' => true])
         ->addForeignKey(['user_id'], 'users', ['id'], [
-            'name' => 'subscriptions_foreign_user_id_680b06a0ad5fc',
-            'delete' => 'CASCADE',
-            'update' => 'CASCADE',
+            'name'        => 'subscriptions_foreign_user_id_680b06a0ad5fc',
+            'delete'      => 'CASCADE',
+            'update'      => 'CASCADE',
             'indexCreate' => true,
         ])
         ->setPrimaryKeys(['id'])
